@@ -76,7 +76,16 @@ void step(double* const f1, double* const f0,
   for(int i=0;i<N;i++) d[i] = 1.0 + 2.0*D*dt/(dx*dx);
   for(int i=0;i<N;i++) u[i] = - D*dt/(dx*dx);
   for(int i=0;i<N;i++) l[i] = - D*dt/(dx*dx);
-
+    
+    for (int i = 0; i< N-1; i++){
+        d[i+1] -= (l[i+1]/d[i]) * u[i]; // hiermit elliminiere ich die Unterdiagonales arrays l
+        f0[i+1] -=  (l[i+1]/d[i]) * f0[i];} // f0 wächst genau so wie d
+        
+    f1[N-1] = f0[N-1]/d[N-1]; // somit habe ich den letzten Eintrag des f1 Arrays. Nun kann ich die anderen davon ausgehend füllen
+  for (int i = N-2; i > 0; i--){
+      f1[i] = (f0[i] - u[i]*f1[i+1])/d[i];}    //warum gilt diese Formel?
+        
+        
 
   delete[] d;
   delete[] u;
